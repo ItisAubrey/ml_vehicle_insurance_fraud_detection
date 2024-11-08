@@ -7,14 +7,6 @@ from src.utils import identify_binary_columns, label_encode_binary_columns, map_
     train_lightgbm_imputation_model, apply_imputation_model
 
 @dataclass
-class DataTrasformationConfig:
-    X_train_path: str=os.path.join('artifacts',"X_train.csv")
-    y_train_path: str=os.path.join('artifacts',"y_train.csv")
-    X_test_path: str=os.path.join('artifacts',"X_test.csv")
-    y_test_path: str=os.path.join('artifacts',"y_test.csv")
-    imputation_model_path: str=os.path.join('artifacts',"imputation_model.pickle")
-
-@dataclass
 class DataTransformationConfig:
     X_train_path: str = os.path.join('artifacts', "X_train.csv")
     y_train_path: str = os.path.join('artifacts', "y_train.csv")
