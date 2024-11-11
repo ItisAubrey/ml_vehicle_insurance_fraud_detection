@@ -1,5 +1,9 @@
 import os
 import sys
+
+from src.components.data_transformation import start_preprocessing, DataTransformationConfig
+from src.components.feature_selection import FeatureSelectionConfig, feature_selection
+from src.components.model_trainer import model_trainer, ModelTrainerConfig
 from src.exception import CustomException
 from src.logger import logging
 import pandas as pd
@@ -51,3 +55,15 @@ class DataIngestion:
 if __name__ == "__main__":
     obj = DataIngestion()
     train_data, test_data = obj.initiate_data_ingestion()
+    # Call the DataTransformation function
+    X_train, y_train, X_test,y_test  = start_preprocessing(train_data, test_data, config=DataTransformationConfig())
+    # Call the Feature Selection function
+    final_X_train, final_X_test, selected_features = feature_selection(X_train, y_train, X_test, config=FeatureSelectionConfig())
+
+    trained_model=model_trainer(final_X_train, final_X_test, y_train, y_test, config=ModelTrainerConfig())
+
+
+
+
+
+

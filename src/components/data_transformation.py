@@ -65,9 +65,10 @@ def start_preprocessing(train_path, test_path, config=DataTransformationConfig()
     X_test = replace_outliers_with_nan(X_test, 'Age')
 
     # Train LightGBM model on non-missing Age values from X_train
-    age_imputation_model = train_lightgbm_imputation_model(X_train, 'Age')
-    X_train = apply_imputation_model(X_train, age_imputation_model, 'Age')
-    X_test = apply_imputation_model(X_test, age_imputation_model, 'Age')
+    age_imputation_model_train = train_lightgbm_imputation_model(X_train, 'Age')
+    age_imputation_model_test = train_lightgbm_imputation_model(X_test, 'Age')
+    X_train = apply_imputation_model(X_train, age_imputation_model_train, 'Age')
+    X_test = apply_imputation_model(X_test, age_imputation_model_test, 'Age')
     X_train['Age'] = X_train['Age'].apply(lambda x: round(x))
     X_test['Age'] = X_test['Age'].apply(lambda x: round(x))
 
