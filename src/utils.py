@@ -3,7 +3,7 @@ import numpy as np
 import lightgbm as lgb
 from sklearn.preprocessing import LabelEncoder
 from imblearn.over_sampling import SMOTE
-
+import pickle
 #%% Data Preparation Functions
 
 def identify_binary_columns(X):
@@ -90,3 +90,12 @@ def apply_smote(X, y):
     print("After SMOTE:", X_resampled.shape, y_resampled.shape)
     print("After SMOTE Label Distribution:", pd.Series(y_resampled).value_counts())
     return X_resampled, y_resampled
+
+
+def load_object(file_path):
+    try:
+        with open(file_path, "rb") as file_obj:
+            return pickle.load(file_obj)
+
+    except Exception as e:
+        raise CustomException(e, sys)

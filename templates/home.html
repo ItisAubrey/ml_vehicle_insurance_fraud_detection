@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Insurance Claim Fraud Detection</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+        .login {
+            background-color: #ffffff;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #007bff;
+            font-weight: bold;
+            text-align: center;
+        }
+        .form-control {
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+        .form-label {
+            font-weight: bold;
+        }
+        .btn {
+            background-color: #007bff;
+            color: white;
+            border-radius: 8px;
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .mb-3 {
+            margin-bottom: 1.5rem;
+        }
+        .select2-container {
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login">
+       <h1>Vehicle Insurance Claim Fraud Detection</h1>
+
+       <form action="{{ url_for('predict_datapoint')}}" method="post">
+
+            <legend>Fraud Prediction</legend>
+
+        <!-- Month -->
+        <div class="mb-3">
+            <label class="form-label">Month</label>
+            <select class="form-control" name="Month" required>
+                <option selected disabled>Select Month</option>
+                <option value="Jan">Jan</option>
+                <option value="Feb">Feb</option>
+                <option value="Mar">Mar</option>
+                <option value="Apr">Apr</option>
+                <option value="May">May</option>
+                <option value="Jun">Jun</option>
+                <option value="Jul">Jul</option>
+                <option value="Aug">Aug</option>
+                <option value="Sep">Sep</option>
+                <option value="Oct">Oct</option>
+                <option value="Nov">Nov</option>
+                <option value="Dec">Dec</option>
+            </select>
+        </div>
+
+        <!-- DayOfWeek -->
+        <div class="mb-3">
+            <label class="form-label">Day of Week</label>
+            <select class="form-control" name="DayOfWeek" required>
+                <option selected disabled>Select Day of Week</option>
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+                <option value="Sunday">Sunday</option>
+            </select>
+        </div>
+
+        <!-- Make -->
+        <div class="mb-3">
+            <label class="form-label">Vehicle Make</label>
+            <select class="form-control" name="Make" required>
+                <option selected disabled>Select Vehicle Make</option>
+                <option value="Honda">Honda</option>
+                <option value="Toyota">Toyota</option>
+                <option value="Ford">Ford</option>
+                <option value="Mazda">Mazda</option>
+                <option value="Chevrolet">Chevrolet</option>
+                <option value="Pontiac">Pontiac</option>
+                <option value="Accura">Accura</option>
+                <option value="Dodge">Dodge</option>
+                <option value="Mercury">Mercury</option>
+                <option value="Jaguar">Jaguar</option>
+                <option value="Nisson">Nisson</option>
+                <option value="VW">VW</option>
+                <option value="Saab">Saab</option>
+                <option value="Saturn">Saturn</option>
+                <option value="Porche">Porche</option>
+                <option value="BMW">BMW</option>
+                <option value="Mecedes">Mecedes</option>
+                <option value="Ferrari">Ferrari</option>
+                <option value="Lexus">Lexus</option>
+            </select>
+        </div>
+
+        <!-- AccidentArea -->
+        <div class="mb-3">
+            <label class="form-label">Accident Area</label>
+            <select class="form-control" name="AccidentArea" required>
+                <option selected disabled>Select Accident Area</option>
+                <option value="Urban">Urban</option>
+                <option value="Rural">Rural</option>
+            </select>
+        </div>
+
+        <!-- DayOfWeekClaimed -->
+        <div class="mb-3">
+            <label class="form-label">Day of Week Claimed</label>
+            <select class="form-control" name="DayOfWeekClaimed" required>
+                <option selected disabled>Select Day of Week Claimed</option>
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+                <option value="Sunday">Sunday</option>
+                <option value="0">0</option>
+            </select>
+        </div>
+
+        <!-- MonthClaimed -->
+        <div class="mb-3">
+            <label class="form-label">Month Claimed</label>
+            <select class="form-control" name="MonthClaimed" required>
+                <option selected disabled>Select Month Claimed</option>
+                <option value="Jan">Jan</option>
+                <option value="Nov">Nov</option>
+                <option value="Jul">Jul</option>
+                <option value="Feb">Feb</option>
+                <option value="Mar">Mar</option>
+                <option value="Dec">Dec</option>
+                <option value="Apr">Apr</option>
+                <option value="Aug">Aug</option>
+                <option value="May">May</option>
+                <option value="Jun">Jun</option>
+                <option value="Sep">Sep</option>
+                <option value="Oct">Oct</option>
+                <option value="0">0</option>
+            </select>
+        </div>
+
+        <!-- Sex -->
+        <div class="mb-3">
+            <label class="form-label">Gender</label>
+            <select class="form-control" name="Sex" required>
+                <option selected disabled>Select Gender</option>
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
+            </select>
+        </div>
+
+        <!-- MaritalStatus -->
+        <div class="mb-3">
+            <label class="form-label">Marital Status</label>
+            <select class="form-control" name="MaritalStatus" required>
+                <option selected disabled>Select Marital Status</option>
+                <option value="Single">Single</option>
+                <option value="Married">Married</option>
+                <option value="Widow">Widow</option>
+                <option value="Divorced">Divorced</option>
+            </select>
+        </div>
+
+        <!-- Fault -->
+        <div class="mb-3">
+            <label class="form-label">Fault</label>
+            <select class="form-control" name="Fault" required>
+                <option selected disabled>Select Fault</option>
+                <option value="Policy Holder">Policy Holder</option>
+                <option value="Third Party">Third Party</option>
+            </select>
+        </div>
+
+        <!-- PolicyType -->
+        <div class="mb-3">
+            <label class="form-label">Policy Type</label>
+            <select class="form-control" name="PolicyType" required>
+                <option selected disabled>Select Policy Type</option>
+                <option value="Sport - Liability">Sport - Liability</option>
+                <option value="Sport - Collision">Sport - Collision</option>
+                <option value="Sedan - Liability">Sedan - Liability</option>
+                <option value="Utility - All Perils">Utility - All Perils</option>
+                <option value="Sedan - All Perils">Sedan - All Perils</option>
+                <option value="Sedan - Collision">Sedan - Collision</option>
+                <option value="Utility - Collision">Utility - Collision</option>
+                <option value="Utility - Liability">Utility - Liability</option>
+                <option value="Sport - All Perils">Sport - All Perils</option>
+            </select>
+        </div>
+
+        <!-- VehicleCategory -->
+        <div class="mb-3">
+            <label class="form-label">Vehicle Category</label>
+            <select class="form-control" name="VehicleCategory" required>
+                <option selected disabled>Select Vehicle Category</option>
+                <option value="Sport">Sport</option>
+                <option value="Utility">Utility</option>
+                <option value="Sedan">Sedan</option>
+            </select>
+        </div>
+
+        <!-- VehiclePrice -->
+        <div class="mb-3">
+            <label class="form-label">Vehicle Price</label>
+            <select class="form-control" name="VehiclePrice" required>
+                <option selected disabled>Select Vehicle Price</option>
+                <option value="more than 69000">More than 69000</option>
+                <option value="20000 to 29000">20000 to 29000</option>
+                <option value="30000 to 39000">30000 to 39000</option>
+                <option value="less than 20000">Less than 20000</option>
+                <option value="40000 to 59000">40000 to 59000</option>
+                <option value="60000 to 69000">60000 to 69000</option>
+            </select>
+        </div>
+
+        <!-- Days_Policy_Accident -->
+        <div class="mb-3">
+            <label class="form-label">Days Policy Accident</label>
+            <select class="form-control" name="Days_Policy_Accident" required>
+                <option selected disabled>Select Days Policy Accident</option>
+                <option value="more than 30">More than 30</option>
+                <option value="15 to 30">15 to 30</option>
+                <option value="none">None</option>
+                <option value="1 to 7">1 to 7</option>
+                <option value="8 to 15">8 to 15</option>
+            </select>
+        </div>
+
+        <!-- Days_Policy_Claim -->
+        <div class="mb-3">
+            <label class="form-label">Days Policy Claim</label>
+            <select class="form-control" name="Days_Policy_Claim" required>
+                <option selected disabled>Select Days Policy Claim</option>
+                <option value="more than 30">More than 30</option>
+                <option value="15 to 30">15 to 30</option>
+                <option value="8 to 15">8 to 15</option>
+                <option value="none">None</option>
+            </select>
+        </div>
+
+        <!-- PastNumberOfClaims -->
+        <div class="mb-3">
+            <label class="form-label">Past Number of Claims</label>
+            <select class="form-control" name="PastNumberOfClaims" required>
+                <option selected disabled>Select Past Number of Claims</option>
+                <option value="none">None</option>
+                <option value="1">1</option>
+                <option value="2 to 4">2 to 4</option>
+                <option value="more than 4">More than 4</option>
+            </select>
+        </div>
+
+        <!-- AgeOfVehicle -->
+        <div class="mb-3">
+            <label class="form-label">Age of Vehicle</label>
+            <select class="form-control" name="AgeOfVehicle" required>
+                <option selected disabled>Select Age of Vehicle</option>
+                <option value="3 years">3 years</option>
+                <option value="6 years">6 years</option>
+                <option value="7 years">7 years</option>
+                <option value="more than 7">More than 7</option>
+                <option value="5 years">5 years</option>
+                <option value="new">New</option>
+                <option value="4 years">4 years</option>
+                <option value="2 years">2 years</option>
+            </select>
+        </div>
+
+        <!-- AgeOfPolicyHolder -->
+        <div class="mb-3">
+            <label class="form-label">Age of Policy Holder</label>
+            <select class="form-control" name="AgeOfPolicyHolder" required>
+                <option selected disabled>Select Age of Policy Holder</option>
+                <option value="26 to 30">26 to 30</option>
+                <option value="31 to 35">31 to 35</option>
+                <option value="41 to 50">41 to 50</option>
+                <option value="51 to 65">51 to 65</option>
+                <option value="21 to 25">21 to 25</option>
+                <option value="36 to 40">36 to 40</option>
+                <option value="16 to 17">16 to 17</option>
+                <option value="over 65">Over 65</option>
+                <option value="18 to 20">18 to 20</option>
+            </select>
+        </div>
+
+        <!-- PoliceReportFiled -->
+        <div class="mb-3">
+            <label class="form-label">Police Report Filed</label>
+            <select class="form-control" name="PoliceReportFiled" required>
+                <option selected disabled>Select Police Report Filed</option>
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+            </select>
+        </div>
+
+        <!-- WitnessPresent -->
+        <div class="mb-3">
+            <label class="form-label">Witness Present</label>
+            <select class="form-control" name="WitnessPresent" required>
+                <option selected disabled>Select Witness Present</option>
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+            </select>
+        </div>
+
+        <!-- AgentType -->
+        <div class="mb-3">
+            <label class="form-label">Agent Type</label>
+            <select class="form-control" name="AgentType" required>
+                <option selected disabled>Select Agent Type</option>
+                <option value="External">External</option>
+                <option value="Internal">Internal</option>
+            </select>
+        </div>
+
+        <!-- NumberOfSuppliments -->
+        <div class="mb-3">
+            <label class="form-label">Number of Supplements</label>
+            <select class="form-control" name="NumberOfSuppliments" required>
+                <option selected disabled>Select Number of Supplements</option>
+                <option value="none">None</option>
+                <option value="more than 5">More than 5</option>
+                <option value="3 to 5">3 to 5</option>
+                <option value="1 to 2">1 to 2</option>
+            </select>
+        </div>
+
+        <!-- AddressChange_Claim -->
+        <div class="mb-3">
+            <label class="form-label">Address Change Claim</label>
+            <select class="form-control" name="AddressChange_Claim" required>
+                <option selected disabled>Select Address Change Claim</option>
+                <option value="1 year">1 year</option>
+                <option value="no change">No change</option>
+                <option value="4 to 8 years">4 to 8 years</option>
+                <option value="2 to 3 years">2 to 3 years</option>
+                <option value="under 6 months">Under 6 months</option>
+            </select>
+        </div>
+
+        <!-- NumberOfCars -->
+        <div class="mb-3">
+            <label class="form-label">Number of Cars</label>
+            <select class="form-control" name="NumberOfCars" required>
+                <option selected disabled>Select Number of Cars</option>
+                <option value="3 to 4">3 to 4</option>
+                <option value="1 vehicle">1 vehicle</option>
+                <option value="2 vehicles">2 vehicles</option>
+                <option value="5 to 8">5 to 8</option>
+                <option value="more than 8">More than 8</option>
+            </select>
+        </div>
+
+        <!-- BasePolicy -->
+        <div class="mb-3">
+            <label class="form-label">Base Policy</label>
+            <select class="form-control" name="BasePolicy" required>
+                <option selected disabled>Select Base Policy</option>
+                <option value="Liability">Liability</option>
+                <option value="Collision">Collision</option>
+                <option value="All Perils">All Perils</option>
+            </select>
+        </div>
+
+        <!-- WeekOfMonth -->
+        <div class="mb-3">
+            <label class="form-label">Week of Month</label>
+            <input type="number" class="form-control" name="WeekOfMonth" required>
+        </div>
+
+        <!-- WeekOfMonthClaimed -->
+        <div class="mb-3">
+            <label class="form-label">Week of Month Claimed</label>
+            <input type="number" class="form-control" name="WeekOfMonthClaimed" required>
+        </div>
+
+        <!-- Age -->
+        <div class="mb-3">
+            <label class="form-label">Age</label>
+            <input type="number" class="form-control" name="Age" required>
+        </div>
+
+        <!-- PolicyNumber -->
+        <div class="mb-3">
+            <label class="form-label">Policy Number</label>
+            <input type="number" class="form-control" name="PolicyNumber" required>
+        </div>
+
+        <!-- RepNumber -->
+        <div class="mb-3">
+            <label class="form-label">Representative Number</label>
+            <input type="number" class="form-control" name="RepNumber" required>
+        </div>
+
+        <!-- Deductible -->
+        <div class="mb-3">
+            <label class="form-label">Deductible</label>
+            <input type="number" class="form-control" name="Deductible" required>
+        </div>
+
+        <!-- DriverRating -->
+        <div class="mb-3">
+            <label class="form-label">Driver Rating</label>
+            <input type="number" class="form-control" name="DriverRating" required>
+        </div>
+
+        <!-- Year -->
+        <div class="mb-3">
+            <label class="form-label">Year</label>
+            <input type="number" class="form-control" name="Year" required>
+        </div>
+        <div class="mb-3">
+<!-- Submit Button -->
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+        <h2>The probability of fraud is: {{ results }}</h2>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
